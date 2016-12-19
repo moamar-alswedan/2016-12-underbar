@@ -232,11 +232,26 @@
   
   _.extend = function(obj) {
     
+    _.each(arguments,function(argobj){
+      _.each(argobj,function(value,key){
+        obj[key]=value;
+      })
+    })
+        return obj
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+  _.each(arguments,function(argobj){
+      _.each(argobj,function(value,key){
+        if(obj[key]===undefined){
+          obj[key]=value;
+        }
+        
+      })
+    })
+        return obj
   };
 
 
@@ -279,7 +294,19 @@
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
+  
+
   _.memoize = function(func) {
+   var obj={};
+   return function(){
+    var h=JSON.stringify(arguments)
+    if(!obj[h]){
+
+      return obj[h]=func.apply(this,arguments)
+    }
+    return obj[h];
+
+   }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -288,7 +315,17 @@
   // The arguments for the original function are passed after the wait
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
+   _.sum = function(x,o){
+    return x+o
+  }
   _.delay = function(func, wait) {
+    var arr = [];
+    for(var i=2;i<arguments.length;i++){
+    arr.push(arguments[i])
+    }
+    setTimeout(function(){ 
+      func.apply(this,arr); 
+    }, wait);
   };
 
 
@@ -303,7 +340,18 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    
+    var newArr = Array.prototype.slice.call(array)
+    for (var i = newArr.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * newArr.length);
+        var arr = newArr[i];
+        newArr[i] = newArr[j];
+        newArr[j] = arr;
+    }
+    return newArr;
   };
+
+
 
 
   /**
@@ -314,16 +362,28 @@
    * but nothing beyond here is required.
    */
 
-  // Calls the method named by functionOrKey on each value in the list.
+  // Calls the method named by functionOrKey on each value in the oncePerUniqueArgumentList.
   // Note: You will need to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+      _.each(collection,function(element){
+      var func;
+        if(typeof (functionOrKey)==="string"){
+         func=element[functionOrKey]
+        } else {
+        func=functionOrKeyn
+        } 
+      })
+      return func.apply(f,args)
   };
 
+  
   // Sort the object's values by a criterion produced by an iterator.
   // If iterator is a string, sort objects by that property with the name
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
+    
+    
   };
 
   // Zip together two or more arrays with elements of the same index
